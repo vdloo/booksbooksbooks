@@ -1,5 +1,5 @@
-from booksbooksbooks.models import Book
-from booksbooksbooks.serializers import BookSerializer
+from REST_API.models import Book
+from REST_API.serializers import BookSerializer
 from rest_framework import generics
 
 class BookList(generics.ListCreateAPIView):

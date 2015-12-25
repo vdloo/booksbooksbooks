@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from booksbooksbooks.models import Book
+from REST_API.models import Book
 
 class BookSerializer(serializers.ModelSerializer):
     class Meta:

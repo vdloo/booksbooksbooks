@@ -24,7 +24,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'booksbooksbooks',
+    'core',
+    'REST_API',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -36,9 +37,10 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.utils.AutomaticLoginMiddleware',
 ]
 
-ROOT_URLCONF = 'booksbooksbooks.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -56,7 +58,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'booksbooksbooks.wsgi.application'
+WSGI_APPLICATION = 'REST_API.wsgi.application'
 
 
 # Database
