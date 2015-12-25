@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'core',
     'REST_API',
+    'importer',
 ]
 
 MIDDLEWARE_CLASSES = [
