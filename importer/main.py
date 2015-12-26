@@ -21,7 +21,8 @@ def list_all_ebooks(directory):
 def analyze_ebook(path):
     try:
         epub = Epub.from_file(path)
-        return (epub.author, epub.title, path)
+        date = epub.metadata.get('date')
+        return (epub.author, epub.title, date, path)
     except:
         return None
 
@@ -40,10 +41,11 @@ def handle_response(response, *args, **kwargs):
     response.close()
 
 def post_ebook(triple):
-    author, title, path = triple
+    author, title, date, path = triple
     data = {
         'author': author,
         'title': title,
+        'published': date,
         'path': path
     }
     hooks = {'response': handle_response}
