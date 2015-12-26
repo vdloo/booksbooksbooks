@@ -1,4 +1,5 @@
 import os
+import re
 import argparse
 import grequests
 from itertools import chain, imap, ifilter
@@ -22,7 +23,9 @@ def analyze_ebook(path):
     try:
         epub = Epub.from_file(path)
         date = epub.metadata.get('date')
-        return (epub.author, epub.title, date, path)
+        match = re.search('\d{4}', date)
+        year = match.group(0) if match else None
+        return (epub.author, epub.title, year, path)
     except:
         return None
 
@@ -41,11 +44,11 @@ def handle_response(response, *args, **kwargs):
     response.close()
 
 def post_ebook(triple):
-    author, title, date, path = triple
+    author, title, year, path = triple
     data = {
         'author': author,
         'title': title,
-        'published': date,
+        'year': year,
         'path': path
     }
     hooks = {'response': handle_response}
