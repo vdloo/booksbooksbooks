@@ -5,7 +5,7 @@ Expect nothing fancy here, just an exercise for me to get a feel for the Django 
 
 - No tests. No proper logging. No nice exception handling. Spaghetti and duct tape all around.
 - Scans a given path for epub files and registers them in a database.
-- Browse the database for books at ```http://localhost:8001/admin/REST_API/book/```
+- Browse the database for books at ```http://localhost:8001```
 - Retrieve on the book object detail page returns the book as a download ```http://localhost:8001/api/book/1/```
 - Download link button on book object pages ```http://localhost:8001/admin/REST_API/book/1/change/```
 
@@ -69,7 +69,7 @@ Browse the Database
 
 Django admin panel with auto admin login at:
 ```
-http://localhost:8001/admin/REST_API/book/
+http://localhost:8001
 ```
 
 List of books
