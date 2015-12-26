@@ -19,12 +19,15 @@ def list_all_ebooks(directory):
     return ifilter(lambda path: path.endswith('.epub'), sequence)
 
 def analyze_ebook(path):
-    epub = Epub.from_file(path)
-    return (epub.author, epub.title, path)
+    try:
+        epub = Epub.from_file(path)
+        return (epub.author, epub.title, path)
+    except:
+        return None
 
 def analyze_all_ebooks(path):
     sequence = list_all_ebooks(path)
-    return imap(analyze_ebook, sequence)
+    return ifilter(lambda item: item, imap(analyze_ebook, sequence))
 
 def handle_response(response, *args, **kwargs):
     if response.status_code == 400:
