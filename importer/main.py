@@ -33,7 +33,10 @@ def handle_response(response, *args, **kwargs):
     if response.status_code == 400:
         print "Skipping already indexed book"
     else:
-        print response.text
+        try:
+            print response.text
+        except:
+            print "Failed encoding the response text, ignoring"
     response.close()
 
 def post_ebook(triple):
@@ -50,7 +53,7 @@ def post_ebook(triple):
 def index_all_ebooks(path):
     sequence = analyze_all_ebooks(path)
     jobs = imap(post_ebook, sequence)
-    return list(grequests.imap(jobs, stream=False, size=4))
+    return list(grequests.imap(jobs, stream=False, size=8))
     
 def main():
     parser = argparse.ArgumentParser()
