@@ -8,5 +8,5 @@ class Book(models.Model):
     path = models.CharField(max_length=255)
 
     class Meta:
-        ordering = ('published', 'author', 'title')
+        ordering = ('-published', 'author', 'title')
         unique_together = ('author', 'title')
