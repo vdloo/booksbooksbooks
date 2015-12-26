@@ -7,6 +7,8 @@ Make sure you system has:
 - python-dev
 - libxml2-dev
 - libxslt1-dev
+- libz-dev
+- build-essential
 - pip
 
 
