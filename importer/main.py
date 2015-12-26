@@ -9,7 +9,7 @@ def iflatmap(proc, sequence):
 
 def stitch_directory_and_files(triple):
     d, _, fs = triple
-    return map(lambda f: os.path.join(d, f), fs)
+    return imap(lambda f: os.path.join(d, f), fs)
     
 def list_all_files(directory):
     return iflatmap(stitch_directory_and_files, os.walk(directory))
@@ -50,7 +50,7 @@ def post_ebook(triple):
 def index_all_ebooks(path):
     sequence = analyze_all_ebooks(path)
     jobs = imap(post_ebook, sequence)
-    grequests.map(jobs)
+    return list(grequests.imap(jobs, stream=False, size=4))
     
 def main():
     parser = argparse.ArgumentParser()
