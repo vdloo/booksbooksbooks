@@ -8,6 +8,7 @@ class BookAdmin(admin.ModelAdmin):
     search_fields = ('author', 'title')
     class Media:
         js = ('js/utils.js',)
+        css = {'all': ('css/hide_admin.css',)}
 
 admin.site.register(Book, BookAdmin)
 admin.site.unregister(User)
