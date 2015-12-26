@@ -1,3 +1,4 @@
+import os
 from REST_API.models import Book
 from REST_API.serializers import BookSerializer
 from rest_framework import generics
@@ -18,5 +19,6 @@ class BookDetail(generics.RetrieveUpdateDestroyAPIView):
 	fd = open(book.path, 'rb')
 	response = HttpResponse(File(fd), content_type='application/epub+zip')
 	filename = "%s-%s.epub" % (book.author, book.title)
+        response['Content-Length'] = os.path.getsize(book.path)
 	response['Content-Disposition'] = 'attachment; filename="%s"' % filename
 	return response
