@@ -5,6 +5,7 @@ class Book(models.Model):
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
     year = models.PositiveSmallIntegerField(blank=True, null=True)
+    extension = models.CharField(max_length=100)
     path = models.CharField(max_length=255)
 
     class Meta:

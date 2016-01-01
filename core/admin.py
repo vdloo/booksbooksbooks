@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('author', 'title', 'year')
+    list_display = ('author', 'title', 'year', 'extension')
+    list_filter = ('extension',)
     search_fields = ('author', 'title')
     class Media:
         js = ('js/utils.js',)

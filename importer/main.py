@@ -13,8 +13,8 @@ accepted_formats = ['epub', 'pdf']
 def iflatmap(proc, sequence):
     return chain.from_iterable(imap(proc, sequence))
 
-def stitch_directory_and_files(triple):
-    d, _, fs = triple
+def stitch_directory_and_files(quadruple):
+    d, _, fs = quadruple
     return imap(lambda f: os.path.join(d, f), fs)
     
 def list_all_files(directory):
@@ -37,7 +37,7 @@ def analyze_epub(path):
         epub = Epub.from_file(path)
         date = epub.metadata.get('date')
         year = get_year_from_date_string(date)
-        return (epub.author, epub.title, year, path)
+        return (epub.author, epub.title, year, path, 'epub')
     except:
         return None
 
@@ -49,7 +49,7 @@ def analyze_pdf(path):
             title = metadata.get('Title')
             date = metadata.get('CreationDate')
             year = get_year_from_date_string(date)
-        return (author, title, year, path)
+        return (author, title, year, path, 'pdf')
     except:
         return None
 
@@ -76,13 +76,14 @@ def handle_response(response, *args, **kwargs):
             print "Failed encoding the response text, ignoring"
     response.close()
 
-def post_ebook(triple):
-    author, title, year, path = triple
+def post_ebook(quadruple):
+    author, title, year, path, extension = quadruple
     data = {
         'author': author,
         'title': title,
         'year': year,
-        'path': path
+        'path': path,
+        'extension': extension
     }
     hooks = {'response': handle_response}
     return grequests.post('http://localhost:8001/api/book/', data=data, 
