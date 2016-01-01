@@ -44,6 +44,7 @@ def analyze_pdf(path):
     try:
         with open(path, 'rb') as f:
             metadata = PdfFileReader(f).getDocumentInfo()
+            metadata = {re.sub('[^A-Za-z]+', '', k): v for k, v in metadata.items()}
             author = metadata.get('Author')
             title = metadata.get('Title')
             date = metadata.get('CreationDate')
