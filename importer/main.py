@@ -4,8 +4,7 @@ import argparse
 import grequests
 from itertools import chain, imap, ifilter
 from epubzilla.epubzilla import Epub
-from pdfminer.pdfparser import PDFParser
-from pdfminer.pdfdocument import PDFDocument
+from pyPdf import PdfFileReader
 
 
 accepted_formats = ['epub', 'pdf']
@@ -44,7 +43,7 @@ def analyze_epub(path):
 def analyze_pdf(path):
     try:
         with open(path, 'rb') as f:
-            metadata = PDFDocument(PDFParser(f)).info
+            metadata = PdfFileReader(f).getDocumentInfo()
             author = metadata.get('Author')
             title = metadata.get('Title')
             date = metadata.get('CreationDate')
