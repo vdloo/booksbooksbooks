@@ -17,8 +17,11 @@ class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     def retrieve(self, request, pk=None):
 	book = get_object_or_404(self.queryset, pk=pk)
 	fd = open(book.path, 'rb')
-	response = HttpResponse(File(fd), content_type='application/epub+zip')
-	filename = "%s-%s.epub" % (book.author, book.title)
+	filename = "%s-%s.%s" % (book.author, book.title, book.extension)
+        if book.extension == 'epub':
+            response = HttpResponse(File(fd), content_type='application/epub+zip')
+        else:
+            response = HttpResponse(File(fd), content_type='application/pdf')
         response['Content-Length'] = os.path.getsize(book.path)
-	response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
 	return response
