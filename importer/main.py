@@ -4,6 +4,11 @@ import argparse
 import grequests
 from itertools import chain, imap, ifilter
 from epubzilla.epubzilla import Epub
+from pdfminer.pdfparser import PDFParser
+from pdfminer.pdfdocument import PDFDocument
+
+
+accepted_formats = ['epub', 'pdf']
 
 def iflatmap(proc, sequence):
     return chain.from_iterable(imap(proc, sequence))
@@ -15,19 +20,47 @@ def stitch_directory_and_files(triple):
 def list_all_files(directory):
     return iflatmap(stitch_directory_and_files, os.walk(directory))
 
+def get_extension(path):
+    return path.split('.')[-1]
+
 def list_all_ebooks(directory):
     sequence = list_all_files(directory)
-    return ifilter(lambda path: path.endswith('.epub'), sequence)
+    return ifilter(lambda path: get_extension(path) in accepted_formats, sequence)
 
-def analyze_ebook(path):
+def get_year_from_date_string(d_str):
+    match = re.search('\d{4}', d_str)
+    year = match.group(0) if match else None
+    return year
+
+def analyze_epub(path):
     try:
         epub = Epub.from_file(path)
         date = epub.metadata.get('date')
-        match = re.search('\d{4}', date)
-        year = match.group(0) if match else None
+        year = get_year_from_date_string(date)
         return (epub.author, epub.title, year, path)
     except:
         return None
+
+def analyze_pdf(path):
+    try:
+        with open(path, 'rb') as f:
+            metadata = PDFDocument(PDFParser(f)).info
+            author = metadata.get('Author')
+            title = metadata.get('Title')
+            date = metadata.get('CreationDate')
+            year = get_year_from_date_string(date)
+        return (author, title, year, path)
+    except:
+        return None
+
+def analyze_ebook(path):
+    extension = get_extension(path)
+    if extension == 'epub':
+        return analyze_epub(path)
+    elif extension == 'pdf':
+        return analyze_pdf(path)
+    else:
+        raise RuntimeError("Tried to analyze book with unimplemented extension %s. Accepted formats: %s" % (extension, accepted_formats))
 
 def analyze_all_ebooks(path):
     sequence = list_all_ebooks(path)

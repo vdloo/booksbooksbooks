@@ -1,10 +1,10 @@
-Simple epub indexer
+Simple ebook indexer
 ===================
 
 Expect nothing fancy here, just an exercise for me to get a feel for the Django REST framework. 
 
 - No tests. No proper logging. No nice exception handling. Spaghetti and duct tape all around.
-- Scans a given path for epub files and registers them in a database.
+- Scans a given path for epub and pdf files and registers them in a database.
 - Browse the database for books at ```http://localhost:8001```
 - Retrieve on the book object detail page returns the book as a download ```http://localhost:8001/api/book/1/```
 - Download link button on book object pages ```http://localhost:8001/admin/REST_API/book/1/change/```
@@ -53,7 +53,7 @@ Start the webserver. ```0.0.0.0``` binds on all interfaces.
 ./manage.py runserver 0.0.0.0:8001
 ```
 
-Index a directory that contains epubs
+Index a directory that contains ebooks (epub or pdf)
 -------------------------------------
 protip: If you're in the US check out [Project Gutenberg's](https://www.gutenberg.org/) giant collection of free epubs in the public domain.
 
