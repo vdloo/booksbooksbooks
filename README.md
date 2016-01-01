@@ -87,3 +87,28 @@ For the API, point your browser to:
 ```
 http://localhost:8001/api/book/
 ```
+
+
+Use MySQL instead of sqlite3
+---------------------------
+First make sure your system has ```libmysqlclient-dev```, 
+then ```pip install MySQL-python``` in your virtualenv.
+
+Create a local_settings.py in core/ that looks something like this:
+```
+from settings import *
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'name of your db',    # Create this yourself first
+        'USER': 'name of your db user',
+        'PASSWORD': 'password for that db user',
+        'HOST': 'host or ip where your db is at',
+        'PORT': '3306',    # MySQL default port
+    }
+}
+```
+
+Perform the migration: ```./manage.py migrate --setings=core.local_settings```
+
+Run the server: ```./manage.py runserver 0.0.0.0:8001 --settings=core.local_settings```
