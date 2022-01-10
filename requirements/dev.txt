@@ -1,5 +1,5 @@
-Django==1.9
-djangorestframework==3.3.2
-Epubzilla==0.1.1
-grequests==0.2.0
-pyPdf==1.13
+Django==3.2.11
+djangorestframework==3.13.1
+epub-meta==0.0.7
+grequests==0.6.0
+PyPDF2==1.26.0
