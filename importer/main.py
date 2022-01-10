@@ -2,19 +2,19 @@ import os
 import re
 import argparse
 import grequests
-from itertools import chain, imap, ifilter
-from epubzilla.epubzilla import Epub
-from pyPdf import PdfFileReader
+from itertools import chain
+from epub_meta import get_epub_metadata
+from PyPDF2 import PdfFileReader
 
 
 accepted_formats = ['epub', 'pdf']
 
 def iflatmap(proc, sequence):
-    return chain.from_iterable(imap(proc, sequence))
+    return chain.from_iterable(map(proc, sequence))
 
 def stitch_directory_and_files(quadruple):
     d, _, fs = quadruple
-    return imap(lambda f: os.path.join(d, f), fs)
+    return map(lambda f: os.path.join(d, f), fs)
     
 def list_all_files(directory):
     return iflatmap(stitch_directory_and_files, os.walk(directory))
@@ -24,7 +24,7 @@ def get_extension(path):
 
 def list_all_ebooks(directory):
     sequence = list_all_files(directory)
-    return ifilter(lambda path: get_extension(path) in accepted_formats, sequence)
+    return filter(lambda path: get_extension(path) in accepted_formats, sequence)
 
 def get_year_from_date_string(d_str):
     match = re.search('\d{4}', d_str)
@@ -33,10 +33,12 @@ def get_year_from_date_string(d_str):
 
 def analyze_epub(path):
     try:
-        epub = Epub.from_file(path)
-        date = epub.metadata.get('date')
+        epub_metadata = get_epub_metadata(path)
+        date = epub_metadata.get('publication_date')
         year = get_year_from_date_string(date)
-        return (epub.author, epub.title, year, path, 'epub')
+        author = epub_metadata['authors'][0]
+        title = epub_metadata['title']
+        return (author, title, year, path, 'epub')
     except:
         return None
 
@@ -64,16 +66,16 @@ def analyze_ebook(path):
 
 def analyze_all_ebooks(path):
     sequence = list_all_ebooks(path)
-    return ifilter(lambda item: item, imap(analyze_ebook, sequence))
+    return filter(lambda item: item, map(analyze_ebook, sequence))
 
 def handle_response(response, *args, **kwargs):
     if response.status_code == 400:
-        print "Skipping already indexed book"
+        print("Skipping already indexed book")
     else:
         try:
-            print response.text
+            print(response.text)
         except:
-            print "Failed encoding the response text, ignoring"
+            print("Failed encoding the response text, ignoring")
     response.close()
 
 def post_ebook(quadruple):
@@ -91,7 +93,7 @@ def post_ebook(quadruple):
 
 def index_all_ebooks(path):
     sequence = analyze_all_ebooks(path)
-    jobs = imap(post_ebook, sequence)
+    jobs = map(post_ebook, sequence)
     return list(grequests.imap(jobs, stream=False, size=8))
     
 def main():

@@ -14,28 +14,20 @@ Installation
 -------------
 
 Make sure your system has:
-- python (2 that is)
-- python-dev
+- python3
+- python3-dev
 - libxml2-dev
 - libxslt1-dev
 - libz-dev
 - build-essential
-- pip
-
-
-Ensure that you have the [virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/install.html) sourced into your environment.
-On Ubuntu you can put something like this in your ```.bashrc```:
-```
-export WORKON_HOME=$HOME/.virtualenvs
-VEW='/usr/share/virtualenvwrapper/virtualenvwrapper.sh'
-[ -f "$VEW" ] && source "$VEW"
-```
+- pip3
 
 
 Clone the repo, install the deps and set up the db:
 ```
 git clone https://github.com/vdloo/booksbooksbooks; cd booksbooksbooks
-mkvirtualenv booksbooksbooks
+python3 -m venv venv
+. venv/bin/activate
 pip install -r requirements/dev.txt
 ./manage.py migrate
 ```

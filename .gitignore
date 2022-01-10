@@ -3,3 +3,4 @@
 *.sqlite3
 *.pyc
 core/local_settings.py
+venv
