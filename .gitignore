@@ -4,3 +4,4 @@
 *.pyc
 core/local_settings.py
 venv
+.idea
